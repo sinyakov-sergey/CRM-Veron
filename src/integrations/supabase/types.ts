@@ -14,16 +14,337 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      avito_messages: {
+        Row: {
+          chat_id: string | null
+          client_id: string
+          created_at: string
+          direction: string
+          id: string
+          message_id: string | null
+          message_text: string
+          message_type: string
+          raw_data: Json | null
+        }
+        Insert: {
+          chat_id?: string | null
+          client_id: string
+          created_at?: string
+          direction?: string
+          id?: string
+          message_id?: string | null
+          message_text: string
+          message_type?: string
+          raw_data?: Json | null
+        }
+        Update: {
+          chat_id?: string | null
+          client_id?: string
+          created_at?: string
+          direction?: string
+          id?: string
+          message_id?: string | null
+          message_text?: string
+          message_type?: string
+          raw_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "avito_messages_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clients: {
+        Row: {
+          avito_chat_id: string | null
+          avito_item_id: string | null
+          avito_item_title: string | null
+          avito_user_id: string | null
+          close_reason: string | null
+          closed_at: string | null
+          created_at: string
+          id: string
+          last_contact_at: string | null
+          manager_id: string
+          name: string
+          next_action_at: string | null
+          phone: string | null
+          sold_at: string | null
+          source: string
+          source_id: string | null
+          status: string
+          vehicle: string | null
+        }
+        Insert: {
+          avito_chat_id?: string | null
+          avito_item_id?: string | null
+          avito_item_title?: string | null
+          avito_user_id?: string | null
+          close_reason?: string | null
+          closed_at?: string | null
+          created_at?: string
+          id?: string
+          last_contact_at?: string | null
+          manager_id: string
+          name: string
+          next_action_at?: string | null
+          phone?: string | null
+          sold_at?: string | null
+          source?: string
+          source_id?: string | null
+          status?: string
+          vehicle?: string | null
+        }
+        Update: {
+          avito_chat_id?: string | null
+          avito_item_id?: string | null
+          avito_item_title?: string | null
+          avito_user_id?: string | null
+          close_reason?: string | null
+          closed_at?: string | null
+          created_at?: string
+          id?: string
+          last_contact_at?: string | null
+          manager_id?: string
+          name?: string
+          next_action_at?: string | null
+          phone?: string | null
+          sold_at?: string | null
+          source?: string
+          source_id?: string | null
+          status?: string
+          vehicle?: string | null
+        }
+        Relationships: []
+      }
+      comments: {
+        Row: {
+          client_id: string
+          created_at: string
+          id: string
+          manager_id: string
+          text: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          id?: string
+          manager_id: string
+          text: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          id?: string
+          manager_id?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interactions: {
+        Row: {
+          client_id: string
+          created_at: string
+          description: string | null
+          id: string
+          manager_id: string | null
+          type: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          manager_id?: string | null
+          type: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          manager_id?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interactions_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          avito_chat_id: string | null
+          avito_item_id: string | null
+          avito_item_title: string | null
+          avito_user_id: string | null
+          created_at: string
+          id: string
+          manager_id: string | null
+          message: string | null
+          name: string
+          phone: string | null
+          source: string
+          source_id: string | null
+          status: string
+          vehicle: string | null
+        }
+        Insert: {
+          avito_chat_id?: string | null
+          avito_item_id?: string | null
+          avito_item_title?: string | null
+          avito_user_id?: string | null
+          created_at?: string
+          id?: string
+          manager_id?: string | null
+          message?: string | null
+          name: string
+          phone?: string | null
+          source?: string
+          source_id?: string | null
+          status?: string
+          vehicle?: string | null
+        }
+        Update: {
+          avito_chat_id?: string | null
+          avito_item_id?: string | null
+          avito_item_title?: string | null
+          avito_user_id?: string | null
+          created_at?: string
+          id?: string
+          manager_id?: string | null
+          message?: string | null
+          name?: string
+          phone?: string | null
+          source?: string
+          source_id?: string | null
+          status?: string
+          vehicle?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          is_active: boolean
+        }
+        Insert: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id: string
+          is_active?: boolean
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          client_id: string
+          comment: string | null
+          completed_at: string | null
+          created_at: string
+          due_at: string
+          id: string
+          manager_id: string
+          status: string
+          type: string
+        }
+        Insert: {
+          client_id: string
+          comment?: string | null
+          completed_at?: string | null
+          created_at?: string
+          due_at: string
+          id?: string
+          manager_id: string
+          status?: string
+          type?: string
+        }
+        Update: {
+          client_id?: string
+          comment?: string | null
+          completed_at?: string | null
+          created_at?: string
+          due_at?: string
+          id?: string
+          manager_id?: string
+          status?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_lead: { Args: { _lead_id: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "manager"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +471,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "manager"],
+    },
   },
 } as const
