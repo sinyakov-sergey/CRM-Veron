@@ -334,6 +334,7 @@ export type Database = {
     }
     Functions: {
       claim_lead: { Args: { _lead_id: string }; Returns: string }
+      distribute_new_leads: { Args: never; Returns: number }
     }
     Enums: {
       app_role: "admin" | "manager"
