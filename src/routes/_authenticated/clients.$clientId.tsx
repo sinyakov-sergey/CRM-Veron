@@ -206,7 +206,7 @@ function ClientPage() {
               <li key={c.id} className="rounded-lg border bg-card p-4">
                 <p className="whitespace-pre-wrap text-base leading-relaxed">{c.text}</p>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  {(c as { profiles?: { full_name?: string } }).profiles?.full_name ?? "Менеджер"} ·{" "}
+                  {c.author} ·{" "}
                   {fmtDateTime(c.created_at)}
                 </p>
               </li>
