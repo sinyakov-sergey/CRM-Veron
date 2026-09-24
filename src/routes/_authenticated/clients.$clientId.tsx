@@ -58,11 +58,20 @@ function ClientPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("comments")
-        .select("id, text, created_at, manager_id, profiles:manager_id(full_name)")
+        .select("id, text, created_at, manager_id")
         .eq("client_id", clientId)
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data ?? [];
+      const ids = [...new Set((data ?? []).map((c) => c.manager_id))];
+      const names = new Map<string, string>();
+      if (ids.length) {
+        const { data: profiles } = await supabase
+          .from("profiles")
+          .select("id, full_name, email")
+          .in("id", ids);
+        for (const p of profiles ?? []) names.set(p.id, p.full_name || p.email || "Менеджер");
+      }
+      return (data ?? []).map((c) => ({ ...c, author: names.get(c.manager_id) ?? "Менеджер" }));
     },
   });
 
