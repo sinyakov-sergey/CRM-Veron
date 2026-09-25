@@ -11,6 +11,7 @@ const NAV = [
   { to: "/new", label: "Новые" },
   { to: "/clients", label: "Клиенты" },
   { to: "/calendar", label: "Календарь" },
+  { to: "/contract", label: "Договор" },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
