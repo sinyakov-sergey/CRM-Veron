@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
+import { Route as AuthenticatedContractRouteImport } from './routes/_authenticated/contract'
 import { Route as AuthenticatedControlRouteImport } from './routes/_authenticated/control'
 import { Route as AuthenticatedNewRouteImport } from './routes/_authenticated/new'
 import { Route as AuthenticatedTodayRouteImport } from './routes/_authenticated/today'
@@ -36,6 +37,11 @@ const AuthRoute = AuthRouteImport.update({
 const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedContractRoute = AuthenticatedContractRouteImport.update({
+  id: '/contract',
+  path: '/contract',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedControlRoute = AuthenticatedControlRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/calendar': typeof AuthenticatedCalendarRoute
+  '/contract': typeof AuthenticatedContractRoute
   '/control': typeof AuthenticatedControlRoute
   '/new': typeof AuthenticatedNewRoute
   '/today': typeof AuthenticatedTodayRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/calendar': typeof AuthenticatedCalendarRoute
+  '/contract': typeof AuthenticatedContractRoute
   '/control': typeof AuthenticatedControlRoute
   '/new': typeof AuthenticatedNewRoute
   '/today': typeof AuthenticatedTodayRoute
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
+  '/_authenticated/contract': typeof AuthenticatedContractRoute
   '/_authenticated/control': typeof AuthenticatedControlRoute
   '/_authenticated/new': typeof AuthenticatedNewRoute
   '/_authenticated/today': typeof AuthenticatedTodayRoute
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/calendar'
+    | '/contract'
     | '/control'
     | '/new'
     | '/today'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/calendar'
+    | '/contract'
     | '/control'
     | '/new'
     | '/today'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/calendar'
+    | '/_authenticated/contract'
     | '/_authenticated/control'
     | '/_authenticated/new'
     | '/_authenticated/today'
@@ -168,6 +180,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCalendarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/contract': {
+      id: '/_authenticated/contract'
+      path: '/contract'
+      fullPath: '/contract'
+      preLoaderRoute: typeof AuthenticatedContractRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/control': {
       id: '/_authenticated/control'
       path: '/control'
@@ -208,6 +227,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
+  AuthenticatedContractRoute: typeof AuthenticatedContractRoute
   AuthenticatedControlRoute: typeof AuthenticatedControlRoute
   AuthenticatedNewRoute: typeof AuthenticatedNewRoute
   AuthenticatedTodayRoute: typeof AuthenticatedTodayRoute
@@ -217,6 +237,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
+  AuthenticatedContractRoute: AuthenticatedContractRoute,
   AuthenticatedControlRoute: AuthenticatedControlRoute,
   AuthenticatedNewRoute: AuthenticatedNewRoute,
   AuthenticatedTodayRoute: AuthenticatedTodayRoute,
