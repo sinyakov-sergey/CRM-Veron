@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      avito_events: {
+        Row: {
+          author_name: string | null
+          chat_id: string | null
+          client_id: string | null
+          created_at: string
+          event_type: string
+          id: string
+          item_title: string | null
+          lead_id: string | null
+          message_text: string | null
+          note: string | null
+          payload: Json | null
+          status: string
+        }
+        Insert: {
+          author_name?: string | null
+          chat_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          item_title?: string | null
+          lead_id?: string | null
+          message_text?: string | null
+          note?: string | null
+          payload?: Json | null
+          status?: string
+        }
+        Update: {
+          author_name?: string | null
+          chat_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          item_title?: string | null
+          lead_id?: string | null
+          message_text?: string | null
+          note?: string | null
+          payload?: Json | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "avito_events_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "avito_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       avito_messages: {
         Row: {
           chat_id: string | null
@@ -57,6 +117,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      avito_settings: {
+        Row: {
+          avito_account_name: string | null
+          avito_user_id: string | null
+          id: number
+          last_checked_at: string | null
+          last_error: string | null
+          last_sync_at: string | null
+          updated_at: string
+          webhook_registered_at: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          avito_account_name?: string | null
+          avito_user_id?: string | null
+          id?: number
+          last_checked_at?: string | null
+          last_error?: string | null
+          last_sync_at?: string | null
+          updated_at?: string
+          webhook_registered_at?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          avito_account_name?: string | null
+          avito_user_id?: string | null
+          id?: number
+          last_checked_at?: string | null
+          last_error?: string | null
+          last_sync_at?: string | null
+          updated_at?: string
+          webhook_registered_at?: string | null
+          webhook_url?: string | null
+        }
+        Relationships: []
       }
       clients: {
         Row: {
