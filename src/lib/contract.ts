@@ -29,7 +29,7 @@ function plural(n: number, f: [string, string, string]) {
 
 function triad(n: number, fem: boolean) {
   const w: string[] = [];
-  w.push(HUND[Math.floor(n / 100)]);
+  w.push(HUND[Math.floor(n / 100)]!);
   const t = n % 100;
   if (t >= 10 && t < 20) w.push(TEENS[t - 10]);
   else {
@@ -54,7 +54,7 @@ export function numberToWords(num: number): string {
   while (num > 0 && i < scales.length) {
     const n = num % 1000;
     if (n) {
-      const s = scales[i];
+      const s = scales[i]!;
       parts.unshift([triad(n, s.fem), s.forms ? plural(n, s.forms) : ""].filter(Boolean).join(" "));
     }
     num = Math.floor(num / 1000);

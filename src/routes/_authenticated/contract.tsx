@@ -99,7 +99,7 @@ function ContractPage() {
       toast.error("Заполните дату, ФИО покупателя, VIN, марку и стоимость");
       return;
     }
-    const price = Number(v.price);
+    const price = Number(v["price"]);
     const g = (k: string) => (v[k] ?? "").trim();
     const buyerFull = [
       g("buyer_fio"),
@@ -156,9 +156,9 @@ function ContractPage() {
               </label>
             ))}
           </div>
-          {s.title === "Автомобиль" && Number(v.price) > 0 && (
+          {s.title === "Автомобиль" && Number(v["price"]) > 0 && (
             <p className="text-xs text-muted-foreground">
-              {formatMoney(Number(v.price))} ({numberToWords(Number(v.price))} рублей 00 копеек)
+              {formatMoney(Number(v["price"]))} ({numberToWords(Number(v["price"]))} рублей 00 копеек)
             </p>
           )}
         </section>
