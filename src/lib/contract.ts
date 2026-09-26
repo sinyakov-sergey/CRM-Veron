@@ -28,8 +28,8 @@ function plural(n: number, f: [string, string, string]) {
 }
 
 function triad(n: number, fem: boolean) {
-  const w: string[] = [];
-  w.push(HUND[Math.floor(n / 100)]!);
+  const w: (string | undefined)[] = [];
+  w.push(HUND[Math.floor(n / 100)]);
   const t = n % 100;
   if (t >= 10 && t < 20) w.push(TEENS[t - 10]);
   else {
