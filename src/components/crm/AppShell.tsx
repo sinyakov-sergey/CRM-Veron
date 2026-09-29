@@ -38,6 +38,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <NavLink key={item.to} to={item.to} label={item.label} />
             ))}
             {me?.isAdmin && <NavLink to="/control" label="Контроль" />}
+            {me?.isAdmin && <NavLink to="/avito" label="Авито" />}
           </nav>
           <button
             type="button"
