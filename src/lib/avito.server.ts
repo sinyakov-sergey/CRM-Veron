@@ -38,7 +38,7 @@ async function avitoFetch<T>(
       authorization: `Bearer ${token}`,
       "content-type": "application/json",
     },
-    body: init?.body === undefined ? undefined : JSON.stringify(init.body),
+    body: init?.body === undefined ? null : JSON.stringify(init.body),
   });
   const text = await res.text();
   if (!res.ok) {
