@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAvitoRouteImport } from './routes/_authenticated/avito'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
 import { Route as AuthenticatedContractRouteImport } from './routes/_authenticated/contract'
 import { Route as AuthenticatedControlRouteImport } from './routes/_authenticated/control'
@@ -34,6 +35,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAvitoRoute = AuthenticatedAvitoRouteImport.update({
+  id: '/avito',
+  path: '/avito',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
   id: '/calendar',
@@ -81,6 +87,7 @@ const ApiPublicAvitoTokenRoute = ApiPublicAvitoTokenRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/avito': typeof AuthenticatedAvitoRoute
   '/calendar': typeof AuthenticatedCalendarRoute
   '/contract': typeof AuthenticatedContractRoute
   '/control': typeof AuthenticatedControlRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/avito': typeof AuthenticatedAvitoRoute
   '/calendar': typeof AuthenticatedCalendarRoute
   '/contract': typeof AuthenticatedContractRoute
   '/control': typeof AuthenticatedControlRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/avito': typeof AuthenticatedAvitoRoute
   '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
   '/_authenticated/contract': typeof AuthenticatedContractRoute
   '/_authenticated/control': typeof AuthenticatedControlRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/avito'
     | '/calendar'
     | '/contract'
     | '/control'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/avito'
     | '/calendar'
     | '/contract'
     | '/control'
@@ -146,6 +157,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/avito'
     | '/_authenticated/calendar'
     | '/_authenticated/contract'
     | '/_authenticated/control'
@@ -185,6 +197,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/avito': {
+      id: '/_authenticated/avito'
+      path: '/avito'
+      fullPath: '/avito'
+      preLoaderRoute: typeof AuthenticatedAvitoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/calendar': {
       id: '/_authenticated/calendar'
@@ -246,6 +265,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAvitoRoute: typeof AuthenticatedAvitoRoute
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
   AuthenticatedContractRoute: typeof AuthenticatedContractRoute
   AuthenticatedControlRoute: typeof AuthenticatedControlRoute
@@ -256,6 +276,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAvitoRoute: AuthenticatedAvitoRoute,
   AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
   AuthenticatedContractRoute: AuthenticatedContractRoute,
   AuthenticatedControlRoute: AuthenticatedControlRoute,
