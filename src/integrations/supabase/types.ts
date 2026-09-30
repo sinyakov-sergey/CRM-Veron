@@ -79,6 +79,7 @@ export type Database = {
           chat_id: string | null
           client_id: string
           created_at: string
+          delivered: boolean
           direction: string
           id: string
           message_id: string | null
@@ -90,6 +91,7 @@ export type Database = {
           chat_id?: string | null
           client_id: string
           created_at?: string
+          delivered?: boolean
           direction?: string
           id?: string
           message_id?: string | null
@@ -101,6 +103,7 @@ export type Database = {
           chat_id?: string | null
           client_id?: string
           created_at?: string
+          delivered?: boolean
           direction?: string
           id?: string
           message_id?: string | null
