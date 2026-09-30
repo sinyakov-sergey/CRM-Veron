@@ -475,67 +475,71 @@ function CloseClientForm({
 }
 
 function AvitoChat({ clientId }: { clientId: string }) {
-  const { data: me } = useMe();
   const queryClient = useQueryClient();
   const [text, setText] = useState("");
+  const loadMessages = useServerFn(avitoChatMessages);
+  const sendMessage = useServerFn(avitoChatSend);
 
   const messagesQ = useQuery({
     queryKey: ["avito", clientId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("avito_messages")
-        .select("*")
-        .eq("client_id", clientId)
-        .order("created_at");
-      if (error) throw error;
-      return data ?? [];
-    },
+    queryFn: () => loadMessages({ data: { clientId } }),
+    refetchInterval: 20000,
   });
 
   const send = useMutation({
     mutationFn: async () => {
-      if (!me) throw new Error("Нет сессии");
       const body = text.trim();
-      if (!body) return;
-      const { error } = await supabase.from("avito_messages").insert({
-        client_id: clientId,
-        direction: "out",
-        message_text: body,
-      });
-      if (error) throw error;
-      await supabase
-        .from("clients")
-        .update({ last_contact_at: new Date().toISOString() })
-        .eq("id", clientId);
-      await logInteraction(clientId, me.userId, "message", body.slice(0, 120));
+      if (!body) return { ok: true } as { ok: boolean; error?: string };
+      return await sendMessage({ data: { clientId, text: body } });
     },
-    onSuccess: () => {
+    onSuccess: (res) => {
       setText("");
+      if (res && res.ok === false) toast.error(res.error ?? "Сообщение не ушло в Авито");
       queryClient.invalidateQueries({ queryKey: ["avito", clientId] });
       queryClient.invalidateQueries({ queryKey: ["history", clientId] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Ошибка"),
   });
 
+  const messages = messagesQ.data?.messages ?? [];
+
   return (
     <section className="rounded-lg border bg-card">
+      <div className="flex items-center justify-between border-b px-4 py-2">
+        <p className="text-xs text-muted-foreground">
+          {messagesQ.data?.error
+            ? "Переписка Авито недоступна"
+            : messagesQ.data?.synced
+              ? "Переписка Авито · обновляется автоматически"
+              : "Переписка"}
+        </p>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => messagesQ.refetch()}
+          disabled={messagesQ.isFetching}
+        >
+          Обновить
+        </Button>
+      </div>
       <div className="max-h-80 space-y-3 overflow-y-auto p-4">
-        {(messagesQ.data ?? []).length === 0 && (
+        {messagesQ.isLoading && <p className="text-sm text-muted-foreground">Загрузка…</p>}
+        {!messagesQ.isLoading && messages.length === 0 && (
           <p className="text-sm text-muted-foreground">Сообщений пока нет.</p>
         )}
-        {(messagesQ.data ?? []).map((m) => (
-          <div
-            key={m.id}
-            className={m.direction === "out" ? "flex justify-end" : "flex justify-start"}
-          >
+        {messages.map((m) => (
+          <div key={m.id} className={m.direction === "out" ? "flex justify-end" : "flex justify-start"}>
             <div
               className={
                 "max-w-[80%] rounded-lg px-3 py-2 text-sm " +
                 (m.direction === "out" ? "bg-primary text-primary-foreground" : "bg-muted")
               }
             >
-              <p className="whitespace-pre-wrap">{m.message_text}</p>
-              <p className="mt-1 text-[11px] opacity-70">{fmtDateTime(m.created_at)}</p>
+              <p className="whitespace-pre-wrap">{m.text}</p>
+              <p className="mt-1 text-[11px] opacity-70">
+                {fmtDateTime(m.createdAt)}
+                {m.direction === "out" && !m.delivered ? " · не отправлено" : ""}
+              </p>
             </div>
           </div>
         ))}
@@ -547,7 +551,11 @@ function AvitoChat({ clientId }: { clientId: string }) {
           send.mutate();
         }}
       >
-        <Input value={text} onChange={(e) => setText(e.target.value)} placeholder="Сообщение" />
+        <Input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Сообщение покупателю в Авито"
+        />
         <Button type="submit" disabled={send.isPending}>
           Отправить
         </Button>
