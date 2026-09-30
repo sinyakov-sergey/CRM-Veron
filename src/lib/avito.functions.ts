@@ -12,11 +12,12 @@ async function assertAdmin(context: { supabase: any; userId: string }) {
   if (!data) throw new Error("Доступно только руководителю");
 }
 
+const PROJECT_ID = "927b5a32-11ea-4f4b-89a3-2eff2931f097";
+
 function webhookUrl() {
   const token = process.env["AVITO_WEBHOOK_TOKEN"];
-  const base =
-    process.env["LOVABLE_PROJECT_URL"] ??
-    `https://project--${process.env["VITE_PROJECT_ID"] ?? "927b5a32-11ea-4f4b-89a3-2eff2931f097"}.lovable.app`;
+  // Стабильный адрес рабочей версии приложения — не меняется при переименовании.
+  const base = `https://project--${PROJECT_ID}-dev.lovable.app`;
   return `${base}/api/public/avito/${token}`;
 }
 
