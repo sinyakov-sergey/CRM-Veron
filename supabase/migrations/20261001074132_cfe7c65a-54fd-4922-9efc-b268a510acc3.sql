@@ -1,0 +1,1 @@
+UPDATE public.clients SET avito_chat_id = 'u2i-AEJjmJsOsLXm4PSt8DvfUg' WHERE id = '11325d65-b68d-4f0a-81bb-c979703b9fd5';
