@@ -70,9 +70,17 @@ export const avitoChatMessages = createServerFn({ method: "POST" })
         });
         const withId = rows.filter((r) => r.message_id);
         if (withId.length) {
-          await supabaseAdmin
+          const ids = withId.map((r) => r.message_id as string);
+          const { data: existing } = await supabaseAdmin
             .from("avito_messages")
-            .upsert(withId as never, { onConflict: "message_id", ignoreDuplicates: true });
+            .select("message_id")
+            .in("message_id", ids);
+          const known = new Set((existing ?? []).map((r) => r.message_id));
+          const fresh = withId.filter((r) => !known.has(r.message_id));
+          if (fresh.length) {
+            const { error: insErr } = await supabaseAdmin.from("avito_messages").insert(fresh as never);
+            if (insErr) throw new Error(insErr.message);
+          }
         }
       } catch (e) {
         error = e instanceof Error ? e.message : "Не удалось обновить переписку";
