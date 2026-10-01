@@ -76,6 +76,9 @@ export type Database = {
       }
       avito_messages: {
         Row: {
+          attachment_kind: string | null
+          attachment_name: string | null
+          attachment_url: string | null
           chat_id: string | null
           client_id: string
           created_at: string
@@ -88,6 +91,9 @@ export type Database = {
           raw_data: Json | null
         }
         Insert: {
+          attachment_kind?: string | null
+          attachment_name?: string | null
+          attachment_url?: string | null
           chat_id?: string | null
           client_id: string
           created_at?: string
@@ -100,6 +106,9 @@ export type Database = {
           raw_data?: Json | null
         }
         Update: {
+          attachment_kind?: string | null
+          attachment_name?: string | null
+          attachment_url?: string | null
           chat_id?: string | null
           client_id?: string
           created_at?: string
@@ -156,6 +165,47 @@ export type Database = {
           webhook_url?: string | null
         }
         Relationships: []
+      }
+      client_files: {
+        Row: {
+          client_id: string
+          created_at: string
+          file_name: string
+          file_path: string
+          id: string
+          manager_id: string
+          mime_type: string | null
+          size_bytes: number | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          file_name: string
+          file_path: string
+          id?: string
+          manager_id: string
+          mime_type?: string | null
+          size_bytes?: number | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          id?: string
+          manager_id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_files_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       clients: {
         Row: {
