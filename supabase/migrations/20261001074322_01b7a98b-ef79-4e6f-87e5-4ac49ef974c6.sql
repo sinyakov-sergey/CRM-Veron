@@ -1,0 +1,2 @@
+DELETE FROM public.avito_messages WHERE client_id = '11325d65-b68d-4f0a-81bb-c979703b9fd5' AND chat_id = 'u2i-AEJjmJsOsLXm4PSt8DvfUg';
+UPDATE public.clients SET avito_chat_id = 'chat_1002' WHERE id = '11325d65-b68d-4f0a-81bb-c979703b9fd5';
