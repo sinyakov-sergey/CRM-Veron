@@ -71,8 +71,12 @@ function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-export async function buildContract(values: Record<string, string>, filename: string) {
-  const res = await fetch("/templates/dkp.docx");
+export async function buildContract(
+  values: Record<string, string>,
+  filename: string,
+  template = "/templates/dkp.docx",
+) {
+  const res = await fetch(template);
   if (!res.ok) throw new Error("Шаблон договора не найден");
   const zip = await JSZip.loadAsync(await res.arrayBuffer());
   const file = zip.file("word/document.xml");
