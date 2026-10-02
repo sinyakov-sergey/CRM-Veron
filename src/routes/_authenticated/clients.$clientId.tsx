@@ -1,14 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { avitoChatMessages, avitoChatSend } from "@/lib/avito-chat.functions";
+import { avitoChatMessages, avitoChatSend, avitoChatSendImage } from "@/lib/avito-chat.functions";
 import {
   ACTION_SHORT,
   CLOSE_REASONS,
@@ -176,9 +176,19 @@ function ClientPage() {
         {showPhone && client.phone && (
           <p className="mt-2 text-xs text-muted-foreground">Нажмите на номер, чтобы скопировать.</p>
         )}
+
+        <ManagerRow
+          clientId={clientId}
+          managerId={client.manager_id}
+          isAdmin={!!me?.isAdmin}
+          meId={me?.userId ?? null}
+        />
       </section>
 
       {chatOpen && <AvitoChat clientId={clientId} />}
+
+      <ClientFiles clientId={clientId} />
+
 
       {openTask && (
         <section className="rounded-lg border bg-card px-4 py-3 text-sm">
