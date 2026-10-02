@@ -135,8 +135,10 @@ export const avitoChatMessages = createServerFn({ method: "POST" })
       let name = m.attachment_name as string | null;
       let text = m.message_text;
       // Старые сообщения, сохранённые до поддержки вложений.
-      if (!kind && m.raw_data && typeof m.raw_data === "object" && m.message_type !== "text") {
-        const p = parseAvito(m.raw_data as Record<string, any>, biggestSize);
+      const rawAny = m.raw_data as Record<string, any> | null;
+      const rawMsg = (rawAny?.["payload"]?.["value"] ?? rawAny) as Record<string, any> | null;
+      if (!kind && rawMsg && typeof rawMsg === "object" && rawMsg["type"] && rawMsg["type"] !== "text") {
+        const p = parseAvito(rawMsg, biggestSize);
         kind = p.kind;
         url = p.url;
         name = p.name;
