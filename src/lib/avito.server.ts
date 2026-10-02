@@ -100,6 +100,52 @@ export function sendMessage(token: string, userId: string, chatId: string, text:
   );
 }
 
+/** Загружает картинку в Авито, возвращает её id и самую крупную ссылку. */
+export async function uploadImage(
+  token: string,
+  userId: string,
+  file: Blob,
+  fileName: string,
+): Promise<{ imageId: string; url: string | null }> {
+  const form = new FormData();
+  form.append("uploadfile[]", file, fileName);
+  const res = await fetch(`${API}/messenger/v1/accounts/${userId}/uploadImages`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${token}` },
+    body: form,
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(`Авито не принял фото: ${res.status} ${text.slice(0, 200)}`);
+  const json = (text ? JSON.parse(text) : {}) as Record<string, Record<string, string>>;
+  const imageId = Object.keys(json)[0];
+  if (!imageId) throw new Error("Авито не вернул id фото");
+  return { imageId, url: biggestSize(json[imageId]) };
+}
+
+export function sendImage(token: string, userId: string, chatId: string, imageId: string) {
+  return avitoFetch<Record<string, unknown>>(
+    token,
+    `/messenger/v1/accounts/${userId}/chats/${chatId}/messages/image`,
+    { method: "POST", body: { image_id: imageId } },
+  );
+}
+
+/** Из набора размеров {"1280x960": url, ...} выбирает самый большой. */
+export function biggestSize(sizes: Record<string, string> | undefined | null): string | null {
+  if (!sizes) return null;
+  let best: string | null = null;
+  let bestArea = -1;
+  for (const [k, url] of Object.entries(sizes)) {
+    const [w, h] = k.split("x").map(Number);
+    const area = (w || 0) * (h || 0);
+    if (area > bestArea) {
+      bestArea = area;
+      best = url;
+    }
+  }
+  return best;
+}
+
 /** Имя собеседника в чате (тот, кто не является нашим аккаунтом). */
 export function counterpartName(chat: AvitoChat, selfId: string): string {
   const other = (chat.users ?? []).find((u) => String(u.id) !== String(selfId));
