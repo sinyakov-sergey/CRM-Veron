@@ -602,7 +602,7 @@ function ClientFiles({ clientId }: { clientId: string }) {
       for (const file of files) {
         const path = `${clientId}/docs/${safeName(file.name)}`;
         const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, {
-          contentType: file.type || undefined,
+          contentType: file.type || "application/octet-stream",
         });
         if (upErr) throw upErr;
         const { error } = await supabase.from("client_files").insert({
@@ -635,7 +635,10 @@ function ClientFiles({ clientId }: { clientId: string }) {
 
   async function open(path: string) {
     const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(path, 300);
-    if (error || !data) return toast.error("Не удалось открыть файл");
+    if (error || !data) {
+      toast.error("Не удалось открыть файл");
+      return;
+    }
     window.open(data.signedUrl, "_blank", "noopener");
   }
 
@@ -746,7 +749,7 @@ function AvitoChat({ clientId }: { clientId: string }) {
       // Авито принимает в чате только фото — документ сохраняем в карточке клиента.
       const path = `${clientId}/docs/${safeName(file.name)}`;
       const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
-        contentType: file.type || undefined,
+        contentType: file.type || "application/octet-stream",
       });
       if (error) throw error;
       const { error: insErr } = await supabase.from("client_files").insert({
