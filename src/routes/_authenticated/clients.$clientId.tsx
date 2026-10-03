@@ -851,7 +851,7 @@ function AvitoChat({ clientId }: { clientId: string }) {
           aria-label="Прикрепить фото или файл"
           title="Прикрепить фото или файл"
         >
-          {attach.isPending ? "…" : "📎"}
+          {attach.isPending ? "…" : "Файл"}
         </Button>
         <input
           ref={fileRef}
