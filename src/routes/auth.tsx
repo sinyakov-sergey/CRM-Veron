@@ -54,7 +54,7 @@ function AuthPage() {
         if (data.session) {
           navigate({ to: "/today", replace: true });
         } else {
-          toast.success("Проверьте почту и подтвердите адрес, затем войдите");
+          toast.success("Аккаунт создан, войдите с указанными данными");
           setMode("in");
         }
       }
@@ -71,17 +71,20 @@ function AuthPage() {
         <div className="mb-8">
           <p className="label-xs">Автосалон</p>
           <h1 className="text-2xl font-semibold tracking-tight">ВЕРОН CRM</h1>
+          {mode === "up" && (
+            <p className="mt-1 text-sm text-muted-foreground">Регистрация менеджера автосалона</p>
+          )}
         </div>
 
         <form onSubmit={submit} className="space-y-4 rounded-lg border bg-card p-6">
           {mode === "up" && (
             <div className="space-y-2">
-              <Label htmlFor="name">Имя</Label>
+              <Label htmlFor="name">Имя сотрудника</Label>
               <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
             </div>
           )}
           <div className="space-y-2">
-            <Label htmlFor="email">Почта</Label>
+            <Label htmlFor="email">{mode === "up" ? "Рабочая почта" : "Почта"}</Label>
             <Input
               id="email"
               type="email"
@@ -104,7 +107,7 @@ function AuthPage() {
             />
           </div>
           <Button type="submit" className="w-full" disabled={busy}>
-            {mode === "in" ? "Войти" : "Создать аккаунт"}
+            {mode === "in" ? "Войти" : "Зарегистрироваться"}
           </Button>
         </form>
 
@@ -113,7 +116,7 @@ function AuthPage() {
           onClick={() => setMode(mode === "in" ? "up" : "in")}
           className="mt-4 w-full text-center text-sm text-muted-foreground underline-offset-4 hover:underline"
         >
-          {mode === "in" ? "Первый вход руководителя — создать аккаунт" : "У меня уже есть аккаунт"}
+          {mode === "in" ? "Регистрация нового менеджера" : "У меня уже есть аккаунт"}
         </button>
       </div>
     </main>
